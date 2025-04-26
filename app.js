@@ -124,20 +124,17 @@ app.post('/admin/reset', async (req, res) => {
   res.json({ success: true, message: '전체 초기화 완료' });
 });
 
+const port = process.env.PORT || 3000;
+
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
-    const port = process.env.PORT || 3000;
-
-    mongoose.connect(process.env.MONGODB_URI)
-      .then(() => {
-        console.log('✅ MongoDB 연결 성공!');
-      })
-      .catch(err => {
-        console.error('❌ MongoDB 연결 실패:', err);
-      })
-      .finally(() => {
-        app.listen(port, () => {
-          console.log(`🚀 서버 실행 중! http://localhost:${port}`);
-        });
-      });
-    
+    console.log('✅ MongoDB 연결 성공!');
+  })
+  .catch(err => {
+    console.error('❌ MongoDB 연결 실패:', err);
+  })
+  .finally(() => {
+    app.listen(port, () => {
+      console.log(`🚀 서버 실행 중! http://localhost:${port}`);
+    });
+  });
