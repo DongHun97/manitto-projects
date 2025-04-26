@@ -127,10 +127,17 @@ app.post('/admin/reset', async (req, res) => {
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     const port = process.env.PORT || 3000;
-    app.listen(port, () => {
-      console.log(`✅ MongoDB 연결 성공! 서버 실행 중: http://localhost:${port}`);
-    });
-  })
-  .catch(err => {
-    console.error('❌ MongoDB 연결 실패:', err);
-  });
+
+    mongoose.connect(process.env.MONGODB_URI)
+      .then(() => {
+        console.log('✅ MongoDB 연결 성공!');
+      })
+      .catch(err => {
+        console.error('❌ MongoDB 연결 실패:', err);
+      })
+      .finally(() => {
+        app.listen(port, () => {
+          console.log(`🚀 서버 실행 중! http://localhost:${port}`);
+        });
+      });
+    
