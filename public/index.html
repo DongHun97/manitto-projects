@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>마니또 게임</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+    select, input, button { padding: 10px; margin: 5px; }
+    #result { margin-top: 20px; font-size: 1.2em; }
+    #adminLoginBox {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>🎁 마니또 추첨 사이트</h2>
+
+  <div id="form">
+    <select id="team">
+      <option value="">팀을 선택하세요</option>
+      <option value="예능1팀">예능1팀</option>
+      <option value="예능2팀">예능2팀</option>
+      <option value="뮤비1팀">뮤비1팀</option>
+      <option value="뮤비2팀">뮤비2팀</option>
+      <option value="광고팀">광고팀</option>
+      <option value="다큐팀">다큐팀</option>
+      <option value="고독한미식가팀">고독한미식가팀</option>
+    </select><br/>
+
+    <input type="text" id="name" placeholder="이름을 입력하세요" /><br/>
+    <input type="password" id="pw" placeholder="비밀번호" /><br/>
+    <button onclick="register()">🎯 마니또 추첨 시작</button>
+    <button onclick="check()">🔍 마니또 확인</button>
+  </div>
+
+  <div id="result"></div>
+
+  <div id="adminLoginBox">
+    <button onclick="showAdminLogin()">🔐 관리자</button>
+  </div>
+
+  <div id="adminLogin" style="display:none;">
+    <h3>관리자 로그인</h3>
+    <input type="text" id="adminId" placeholder="ID" /><br/>
+    <input type="password" id="adminPw" placeholder="Password" /><br/>
+    <button onclick="adminLogin()">로그인</button>
+  </div>
+
+  <div id="adminResult"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
