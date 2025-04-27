@@ -56,16 +56,39 @@ app.post('/register', async (req, res) => {
 
   const exist = await Team.find({ team });
   if (exist.length === 0) {
-    let assigned;
-    do {
-      assigned = shuffle([...members]);
-    } while (members.some((v, i) => v === assigned[i]));
-    
+    let assigned = {};
 
+    if (team === "뮤비2팀") {
+      // 뮤비2팀은 김서현 ➔ 강동훈 고정
+      const giverList = members.filter(n => n !== "김서현");
+      const receiverList = members.filter(n => n !== "강동훈");
+
+      do {
+        shuffle(receiverList);
+      } while (giverList.some((giver, idx) => giver === receiverList[idx]));
+
+      assigned["김서현"] = "강동훈";
+      for (let i = 0; i < giverList.length; i++) {
+        assigned[giverList[i]] = receiverList[i];
+      }
+    } else {
+      // 다른 팀은 전원 랜덤
+      let shuffled;
+      do {
+        shuffled = shuffle([...members]);
+      } while (members.some((v, i) => v === shuffled[i]));
+
+      for (let i = 0; i < members.length; i++) {
+        assigned[members[i]] = shuffled[i];
+      }
+    }
+
+    // MongoDB에 저장
     for (let i = 0; i < members.length; i++) {
-      const pwhash = members[i] === name ? await bcrypt.hash(password, 10) : null;
-      await Team.create({ team, name: members[i], passwordHash: pwhash, assigned: assigned[i] });
-      await generateAlias(team, assigned[i]);
+      const memberName = members[i];
+      const pwHash = memberName === name ? await bcrypt.hash(password, 10) : null;
+      await Team.create({ team, name: memberName, passwordHash: pwHash, assigned: assigned[memberName] });
+      await generateAlias(team, assigned[memberName]);
     }
   } else {
     const user = await Team.findOne({ team, name });
@@ -75,6 +98,7 @@ app.post('/register', async (req, res) => {
     user.passwordHash = await bcrypt.hash(password, 10);
     await user.save();
   }
+
   res.json({ success: true });
 });
 
